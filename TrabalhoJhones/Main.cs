@@ -15,6 +15,11 @@ namespace BibliotecaLD {
             // Instânciando a classe do banco
             this._database = new Database(Application.StartupPath + "\\db\\database.db");
 
+            if (!_database.Ok) {
+                Application.Exit();
+                return;
+            }
+
             // Carregando os dados da tabela
             RefreshData();
         }

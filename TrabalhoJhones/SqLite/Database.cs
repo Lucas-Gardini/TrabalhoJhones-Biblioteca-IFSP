@@ -10,6 +10,7 @@ namespace BibliotecaLD {
     /// Classe responsável pela criação do banco caso não exista, além de exportar uma outra classe customizada, para geração de comandos SQL
     /// </summary>
     public class Database {
+        public bool Ok { get; set; }
         private static SQLiteConnection _sQLiteConnection;
 
         /// <summary>
@@ -21,9 +22,10 @@ namespace BibliotecaLD {
                 var confirm = MessageBox.Show("Deseja criar o arquivo?", "Banco de dados não encontrado", MessageBoxButtons.YesNo);
 
                 if (confirm == DialogResult.No) {
+                    Ok = false;
                     Application.Exit();
                     return;
-                };
+                }
 
                 // Obtendo todo o caminho, até onde o arquivo do banco ficará
                 List<string> pathSplitted = connectionPath.Split('\\').ToList();
@@ -40,13 +42,18 @@ namespace BibliotecaLD {
                 MessageBox.Show($"Arquivo criado em {connectionPath}");
             }
 
-            // Criando a conexão
-            string connectionString = $"Data Source={connectionPath}; Version=3;";
-            _sQLiteConnection = new SQLiteConnection(connectionString);
+            if (File.Exists(connectionPath)) {
 
-            // Criando as tabelas do banco e fechando a aplicação em caso de erro
-            bool success = Models.CreateTables(_sQLiteConnection);
-            if (!success) Application.Exit();
+                // Criando a conexão
+                string connectionString = $"Data Source={connectionPath}; Version=3;";
+                _sQLiteConnection = new SQLiteConnection(connectionString);
+
+                // Criando as tabelas do banco e fechando a aplicação em caso de erro
+                bool success = Models.CreateTables(_sQLiteConnection);
+                if (!success) Application.Exit();
+
+                Ok = true;
+            }
         }
 
         /// <summary>

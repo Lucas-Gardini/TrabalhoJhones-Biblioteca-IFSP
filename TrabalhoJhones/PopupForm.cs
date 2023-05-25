@@ -64,6 +64,11 @@ namespace BibliotecaLD {
                 return;
             }
 
+            if (int.Parse(TxtAno.Text) < 0) {
+                MessageBox.Show("O ano não pode ser negativo!");
+                return;
+            }
+
             // Se o id for -1, significa que o usuário está adicionando um novo livro, caso contrário, atualiza o livro
             if (_idToDelete == -1) {
                 var result = _database.From("livros").Insert(
