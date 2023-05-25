@@ -54,6 +54,8 @@ namespace BibliotecaLD {
             // Obtém o item selecionado
             var selectedBook = DataGridBooks.Rows[rowIndex].Cells;
 
+            if (selectedBook[0].Value == null) return;
+
             // Instancia uma nova classe/objeto do tipo Update, passando os valores da linha selecionada
             var book = new Update() {
                 Id = selectedBook[0].Value.ToString(),
